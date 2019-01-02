@@ -64,7 +64,7 @@ function checkKey(e,keydown){
 }
 
 function speedqualizervector(){
-	let _movevector = new Point(movevector.x, movevector.y);
+	_movevector = new Point(movevector.x, movevector.y);
 	_movevector.normalize();
 	speedvector += (_movevector*charspeed);
 	//checks if the player moves faster than the maximum speed
@@ -87,9 +87,47 @@ function init(){
 	rightFoot.fillColor = 'black';
 }
 
-function fireWorked(){ //functie die arrows naar het midden van het scherm gaat knallen vanaf de rand
-	let arrowsize = new Size(4,5);
-	let arrowpoint =
+var arrowspeed = 50
+var arrowDestination = new Point (window.innerWidth/2, window.innerHeight/2)
+var arrowStartPosition = new Point (window.innerWidth/2,20)
+// teken een pijl
+var arrow = new Path();
+arrow.strokeColor = 'red';
+arrow.fillColor = 'purple';
+arrow.add(new Point(0, 10));
+arrow.add(new Point(35, 10));
+arrow.add(new Point(35,5));
+arrow.add(new Point(50,5));
+arrow.add(new Point(60,12));
+arrow.add(new Point(50,19));
+arrow.add(new Point(35,19));
+arrow.add(new Point(35,14));
+arrow.add(new Point(0,14));
+arrow.closed = true;
+// maak een pijl symbol
+
+var arrowshot = false;
+
+function fireWorked() { //functie die arrows naar het midden van het scherm gaat knallen vanaf de
+
+if (arrowshot == false) {
+  arrow.position = arrowStartPosition;
+  arrowshot = true;
+  arrowDestination = Point.random()  * view.size;
+  var vector = arrowDestination - arrow.position;
+  arrow.rotate(vector.angle)
+}
+
+var vector = arrowDestination - arrow.position;
+
+console.log(arrow.position)
+arrow.position += vector / arrowspeed;
+
+if (vector.length < 5) {
+    destination = Point.random() * view.size;
+    arrow.fillColor = 'red';
+  }
+
 }
 
 function legReworked(){
@@ -114,6 +152,7 @@ function optimization(){
 }
 
 function onFrame(event){
+
   if (event.count % 25 == 0)
     stepbool = !stepbool;
   speedqualizervector();
@@ -121,6 +160,7 @@ function onFrame(event){
   legReworked();
   optimization();
 	lastAngle = charAngle;
+  fireWorked();
 }
 
 init();
