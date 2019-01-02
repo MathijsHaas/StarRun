@@ -26,45 +26,45 @@ document.onkeydown = keydown;
 document.onkeyup = keyup;
 
 function keyup(e){
-    e = e || window.event;
-    checkKey(e,0);
+  e = e || window.event;
+  checkKey(e,0);
 }
 
 function keydown(e){
-    e = e || window.event;
-    checkKey(e,1);
+  e = e || window.event;
+  checkKey(e,1);
 }
 
 function setMovevector(){
-    movevector.length = 0;
-    movevector.y += -1 * upPressed;
-    movevector.y += 1 * downPressed;
-    movevector.x += -1 * leftPressed;
-    movevector.x += 1 * rightPressed;
+  movevector.length = 0;
+  movevector.y += -1 * upPressed;
+  movevector.y += 1 * downPressed;
+  movevector.x += -1 * leftPressed;
+  movevector.x += 1 * rightPressed;
 }
 
 function checkKey(e,keydown){
-    if (e.keyCode == '38') {
-        upPressed = keydown;
-        // up arrow
-    }
-    if (e.keyCode == '40') {
-        downPressed = keydown;
-        // down arrow
-    }
-    if (e.keyCode == '37') {
-        leftPressed = keydown;
-       // left arrow
-    }
-    if (e.keyCode == '39') {
-        rightPressed = keydown;
-       // right arrow
-    }
-    setMovevector();
+  if (e.keyCode == '38') {
+    upPressed = keydown;
+    // up arrow
+  }
+  if (e.keyCode == '40') {
+    downPressed = keydown;
+    // down arrow
+  }
+  if (e.keyCode == '37') {
+    leftPressed = keydown;
+   // left arrow
+  }
+  if (e.keyCode == '39') {
+    rightPressed = keydown;
+   // right arrow
+  }
+  setMovevector();
 }
 
 function speedqualizervector(){
-	_movevector = new Point(movevector.x, movevector.y);
+	let _movevector = new Point(movevector.x, movevector.y);
 	_movevector.normalize();
 	speedvector += (_movevector*charspeed);
 	//checks if the player moves faster than the maximum speed
@@ -80,42 +80,47 @@ function speedqualizervector(){
 }
 
 function init(){
-    path = new Path();
-    path.add(charpos);
-    path.strokeColor = 'black';
-		leftFoot.fillColor = 'black';
-		rightFoot.fillColor = 'black';
+  path = new Path();
+  path.add(charpos);
+  path.strokeColor = 'black';
+	leftFoot.fillColor = 'black';
+	rightFoot.fillColor = 'black';
+}
+
+function fireWorked(){ //functie die arrows naar het midden van het scherm gaat knallen vanaf de rand
+	let arrowsize = new Size(4,5);
+	let arrowpoint =
 }
 
 function legReworked(){
-    _charAngle = charAngle - lastAngle;
-    leftPos = leftPos + speedvector;
-    rightPos = rightPos + speedvector;
-    leftPos = leftPos.rotate(_charAngle,charpos);
-    rightPos = rightPos.rotate(_charAngle,charpos);
+  _charAngle = charAngle - lastAngle;
+  leftPos = leftPos + speedvector;
+  rightPos = rightPos + speedvector;
+  leftPos = leftPos.rotate(_charAngle,charpos);
+  rightPos = rightPos.rotate(_charAngle,charpos);
 
-    legspeed = 0.95;
-    if(stepbool){
-        leftFoot.position = leftFoot.position * legspeed + leftPos * (1 - legspeed);
-    } else {
-        rightFoot.position = rightFoot.position * legspeed + rightPos * (1 - legspeed);
-    }
+  legspeed = 0.95;
+  if(stepbool){
+    leftFoot.position = leftFoot.position * legspeed + leftPos * (1 - legspeed);
+  } else {
+    rightFoot.position = rightFoot.position * legspeed + rightPos * (1 - legspeed);
+  }
 }
 
 function optimization(){
-    if(path.segments.length%maxArraylength==0){
-        path.simplify(0.1);
-    }
+  if(path.segments.length%maxArraylength==0){
+    path.simplify(0.1);
+  }
 }
 
 function onFrame(event){
-    if (event.count % 25 == 0)
-        stepbool = !stepbool;
-    speedqualizervector();
-    charpos += speedvector;
-    legReworked();
-    optimization();
-		lastAngle = charAngle;
+  if (event.count % 25 == 0)
+    stepbool = !stepbool;
+  speedqualizervector();
+  charpos += speedvector;
+  legReworked();
+  optimization();
+	lastAngle = charAngle;
 }
 
 init();
