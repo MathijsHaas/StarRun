@@ -1,11 +1,11 @@
 var charspeed = 1,
-	maxspeed = 4,
-	drag = 0.9;
+		maxspeed = 4,
+		drag = 0.9;
 
 var charpos = new Point( window.innerWidth/2, window.innerHeight/2),
     movevector = new Point(0,0),
-	speedvector = new Point(0, 0),
-	lastAngle = 0,
+		speedvector = new Point(0, 0),
+		lastAngle = 0,
     charAngle = 0,
     stepbool = true; //true is left foot
 
@@ -13,7 +13,7 @@ var pathArray = [],
     maxArraylength = 40,
     leftPos = new Point(charpos.x-20,charpos.y),
     rightPos = new Point(charpos.x+20,charpos.y),
-	leftFoot = new Path.Circle(new Point(charpos.x-20,charpos.y), 5),
+		leftFoot = new Path.Circle(new Point(charpos.x-20,charpos.y), 5),
     rightFoot = new Path.Circle(new Point(charpos.x+20,charpos.y), 5);
 
 // controller vars
@@ -79,30 +79,12 @@ function speedqualizervector(){
     charAngle = speedvector.angle - 90;
 }
 
-function pathHandler(curPath){
-    _curPath = curPath.clone();
-    _curPath.scale(1.1);
-    _curPath.strokeColor = 'blue';
-    pathArray.push(_curPath);
-    pathArray.forEach(function(item){
-        item.scale(1.1);
-    });
-    if (pathArray.length > maxArraylength){
-        pathArray.shift().remove();
-    }
-}
-
-function drawPlayer(){
-    path.add(charpos);
-    path.strokeColor = 'black';
-}
-
 function init(){
     path = new Path();
     path.add(charpos);
     path.strokeColor = 'black';
-	leftFoot.fillColor = 'black';
-	rightFoot.fillColor = 'black';
+		leftFoot.fillColor = 'black';
+		rightFoot.fillColor = 'black';
 }
 
 function legReworked(){
@@ -111,11 +93,10 @@ function legReworked(){
     rightPos = rightPos + speedvector;
     leftPos = leftPos.rotate(_charAngle,charpos);
     rightPos = rightPos.rotate(_charAngle,charpos);
-    
+
     legspeed = 0.95;
     if(stepbool){
         leftFoot.position = leftFoot.position * legspeed + leftPos * (1 - legspeed);
-
     } else {
         rightFoot.position = rightFoot.position * legspeed + rightPos * (1 - legspeed);
     }
@@ -132,12 +113,9 @@ function onFrame(event){
         stepbool = !stepbool;
     speedqualizervector();
     charpos += speedvector;
-    //drawPlayer();
-    //legWork();
     legReworked();
-    pathHandler(path);
     optimization();
-	lastAngle = charAngle;
+		lastAngle = charAngle;
 }
 
 init();
