@@ -92,8 +92,6 @@ var arrowDestination = new Point (window.innerWidth/2, window.innerHeight/2)
 var arrowStartPosition = new Point (window.innerWidth/2,20)
 // teken een pijl
 var arrow = new Path();
-arrow.strokeColor = 'red';
-arrow.fillColor = 'purple';
 arrow.add(new Point(0, 10));
 arrow.add(new Point(35, 10));
 arrow.add(new Point(35,5));
@@ -111,6 +109,9 @@ var arrowshot = false;
 function fireWorked() { //functie die arrows naar het midden van het scherm gaat knallen vanaf de
 
 if (arrowshot == false) {
+if (arrowShot == false) {
+  arrow.strokeColor = 'red';
+  arrow.fillColor = 'purple';
   arrow.position = arrowStartPosition;
   arrowshot = true;
   arrowDestination = Point.random()  * view.size;
@@ -119,13 +120,21 @@ if (arrowshot == false) {
 }
 
 var vector = arrowDestination - arrow.position;
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> b0b678ea2d2f1a18fd2872c682f46f3548eaf609
 arrow.position += vector / arrowspeed;
 
 if (vector.length < 5) {
-    destination = Point.random() * view.size;
     arrow.fillColor = 'red';
+    particleBurst(arrowDestination);
+    arrow.fillColor = 'white';
+    arrow.strokeColor = 'white';
+    arrow.position = arrowStartPosition;
+    arrowShot = false;
+    arrow.rotate(-vector.angle);
   }
 }
 
@@ -135,8 +144,11 @@ function getRandomInt(min, max) {
 	return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
 
+<<<<<<< HEAD
 function particleBurst(explosionpoint){
 	var explosionPoint = new Point(getRandomInt(0, window.innerWidth), getRandomInt(0, window.innerHeight));
+=======
+>>>>>>> b0b678ea2d2f1a18fd2872c682f46f3548eaf609
 	var particleN = 80; //Number of particles per explosion (test this part)
 	var particles = [];
 	var directions = [];
