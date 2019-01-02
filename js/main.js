@@ -92,8 +92,6 @@ var arrowDestination = new Point (window.innerWidth/2, window.innerHeight/2)
 var arrowStartPosition = new Point (window.innerWidth/2,20)
 // teken een pijl
 var arrow = new Path();
-arrow.strokeColor = 'red';
-arrow.fillColor = 'purple';
 arrow.add(new Point(0, 10));
 arrow.add(new Point(35, 10));
 arrow.add(new Point(35,5));
@@ -106,36 +104,39 @@ arrow.add(new Point(0,14));
 arrow.closed = true;
 // maak een pijl symbol
 
-var arrowshot = false;
+var arrowShot = false;
 
 function fireWorked() { //functie die arrows naar het midden van het scherm gaat knallen vanaf de
-
-if (arrowshot == false) {
+if (arrowShot == false) {
+  arrow.strokeColor = 'red';
+  arrow.fillColor = 'purple';
   arrow.position = arrowStartPosition;
-  arrowshot = true;
+  arrowShot = true;
   arrowDestination = Point.random()  * view.size;
   var vector = arrowDestination - arrow.position;
   arrow.rotate(vector.angle)
 }
 
 var vector = arrowDestination - arrow.position;
-
-console.log(arrow.position)
 arrow.position += vector / arrowspeed;
 
 if (vector.length < 5) {
-    destination = Point.random() * view.size;
-    arrow.fillColor = 'red';
+    particleBurst(arrowDestination);
+    arrow.fillColor = 'white';
+    arrow.strokeColor = 'white';
+    arrow.position = arrowStartPosition;
+    arrowShot = false;
+    arrow.rotate(-vector.angle);
   }
 }
+
 function getRandomInt(min, max) {
 	min = Math.ceil(min);
 	max = Math.floor(max);
 	return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
 
-function particleBurst(){
-	var explosionPoint = new Point(getRandomInt(0, window.innerWidth), getRandomInt(0, window.innerHeight));
+function particleBurst(explosionPoint){
 	var particleN = 80; //Number of particles per explosion (test this part)
 	var particles = [];
 	var directions = [];
@@ -194,7 +195,6 @@ function optimization(){
 function onFrame(event){
   if (event.count % 25 == 0){
     stepbool = !stepbool;
-		particleBurst();
 	}
   speedqualizervector();
   charpos += speedvector;
