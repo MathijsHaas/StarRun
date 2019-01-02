@@ -9,7 +9,7 @@ var charpos = new Point( window.innerWidth/2, window.innerHeight/2),
     charAngle = 0,
     stepbool = true; //true is left foot
 
-var pathArray = [],
+var explosionArray = [],
     maxArraylength = 40,
     leftPos = new Point(charpos.x-20,charpos.y),
     rightPos = new Point(charpos.x+20,charpos.y),
@@ -127,7 +127,47 @@ if (vector.length < 5) {
     destination = Point.random() * view.size;
     arrow.fillColor = 'red';
   }
+}
+function getRandomInt(min, max) {
+	min = Math.ceil(min);
+	max = Math.floor(max);
+	return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+}
 
+function particleBurst(){
+	var explosionPoint = new Point(getRandomInt(0, window.innerWidth), getRandomInt(0, window.innerHeight));
+	var particleN = 80; //Number of particles per explosion (test this part)
+	var particles = [];
+	var directions = [];
+	for(var i = 0; i<particleN;  i++){
+		particles.push(new Shape.Circle(explosionPoint, 5));
+		var speed = getRandomInt(500,1000);
+		var angle = Math.random()*Math.PI*2;
+		directions[i] = new Point (Math.cos(angle)*speed , Math.sin(angle)* speed)
+	}
+	var BoomShakalaka = new Group(particles);
+	BoomShakalaka.strokeColor = 'black';
+	BoomShakalaka.data.origin = explosionPoint;
+	BoomShakalaka.data.directions = directions;
+	BoomShakalaka.data.lifespan = 100;
+	explosionArray.push(BoomShakalaka);
+}
+
+function particleBois(){
+	for(var i = 0; i<explosionArray.length;  i++){
+		var curExplosion = explosionArray[i];
+		var originPoint = curExplosion.data.origin;
+		for(var j = 0; j<curExplosion.children.length; j++){
+			var curParticle = curExplosion.children[j];
+			var vector = curExplosion.data.directions[j];
+			curParticle.position += (vector * curExplosion.data.lifespan) / 10000;
+			//curParticle.position.x = curParticle.position.x + curExplosion.data.lifespan;
+		}
+		curExplosion.data.lifespan--;
+		if(curExplosion.data.lifespan < 10){
+			explosionArray.shift().remove();
+		}
+	}
 }
 
 function legReworked(){
@@ -152,13 +192,15 @@ function optimization(){
 }
 
 function onFrame(event){
-
-  if (event.count % 25 == 0)
+  if (event.count % 25 == 0){
     stepbool = !stepbool;
+		particleBurst();
+	}
   speedqualizervector();
   charpos += speedvector;
   legReworked();
   optimization();
+	particleBois();
 	lastAngle = charAngle;
   fireWorked();
 }
