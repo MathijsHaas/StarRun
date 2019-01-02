@@ -120,7 +120,7 @@ if (arrowshot == false) {
 
 var vector = arrowDestination - arrow.position;
 
-console.log(arrow.position)
+
 arrow.position += vector / arrowspeed;
 
 if (vector.length < 5) {
@@ -128,13 +128,14 @@ if (vector.length < 5) {
     arrow.fillColor = 'red';
   }
 }
+
 function getRandomInt(min, max) {
 	min = Math.ceil(min);
 	max = Math.floor(max);
 	return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
 
-function particleBurst(){
+function particleBurst(explosionpoint){
 	var explosionPoint = new Point(getRandomInt(0, window.innerWidth), getRandomInt(0, window.innerHeight));
 	var particleN = 80; //Number of particles per explosion (test this part)
 	var particles = [];
@@ -164,7 +165,7 @@ function particleBois(){
 			//curParticle.position.x = curParticle.position.x + curExplosion.data.lifespan;
 		}
 		curExplosion.data.lifespan--;
-		if(curExplosion.data.lifespan < 10){
+		if(curExplosion.data.lifespan < 5){
 			explosionArray.shift().remove();
 		}
 	}
